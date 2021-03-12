@@ -1,0 +1,94 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.0'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+	id 'eclipse'
+}
+
+
+
+
+
+group = 'com.lm.aefg'
+version = '1.0.0-RELEASE'
+sourceCompatibility = '11'
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+	baseName = 'encoder-service'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+ext {
+	set('springCloudVersion', "2020.0.0-SNAPSHOT")
+	set('lombokVersion', "1.18.12")
+}
+
+sourceSets {
+    main.java.srcDirs += "build/generated/sources/annotationProcessor/java/main"
+}
+
+repositories {
+	mavenLocal()
+	maven { url 'https://repo.spring.io/snapshot' }
+  	maven { url 'https://repo.spring.io/milestone' }
+	mavenCentral()
+}
+
+dependencies {
+	//CloudStarter
+	implementation 'org.springframework.cloud:spring-cloud-context'
+	//BootStarter
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//implementation 'org.springframework.boot:spring-boot-starter-aop'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	
+ 	//implementation "io.springfox:springfox-swagger2:2.9.2"
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.0'
+	
+    //Support
+    compile 'org.modelmapper:modelmapper:2.3.0'
+
+    
+	//Lombok & MapStruct
+	implementation "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+          
+    
+    
+	//Test
+	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	//testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.1.0'
+	testImplementation('org.junit.vintage:junit-vintage-engine');
+  	testImplementation('org.junit.jupiter:junit-jupiter-api');
+
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}
+
+test {
+	useJUnitPlatform()
+}

@@ -1,0 +1,10 @@
+# SERVICE DATA
+info:
+  component: Encoder Service
+  version: 1.0
+# INFRA DATA
+server:
+  port: 8085
+spring:
+  application:
+    name: Encoder-service
